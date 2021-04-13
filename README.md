@@ -27,10 +27,12 @@ This document explores a new set of essential `system.*` instructions.
 
 ## Potential extensions
 
-The following extensions are not feasible yet because they depend on proposals such as Interface Types, but may become useful eventually:
+The following extensions are not feasible yet because they depend on future features such as Interface Types or may require further evaluation, but may become useful eventually:
 
 * `system.log` logs a message to the system console.
   * `system.log : [string] -> []`
+
+* Access to the system's IANA timezone database.
 
 ## Considerations
 
