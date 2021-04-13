@@ -6,7 +6,7 @@ WebAssembly is sandboxed and does not have access to functionality other than wh
 
 However, some system features like obtaining the current time are essential to run basic (portable) WebAssembly modules both on and off the Web, and being able to access these features in a uniform way would help to battle fragmentation that would otherwise require recompiling to use different import namespaces or, to work around having to recompile, polyfills, which is typically good to avoid on the Web where code size is especially important.
 
-This document explores a new set of essential `system.*` instructions.
+This document explores a new set of essential `system.*` instructions, addressing concerns raised in discussions like [[1](https://github.com/WebAssembly/WASI/issues/401)] and [[2](https://github.com/WebAssembly/design/issues/1407)].
 
 ## Motivation
 
