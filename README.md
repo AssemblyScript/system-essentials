@@ -50,3 +50,4 @@ The list of instructions is not exhaustive and does not imply that instructions 
 
 * WASI applications could utilize system essentials, once available, reducing non-portable WASI API surface.
 * AssemblyScript could replace its custom essentials `env.time`, `env.seed` and eventually `env.trace` and `env.abort` (requires `system.log`) currently implemented as imports with system essentials, and would not have to choose between Web APIs (incompatible with WASI) and WASI (polyfill required).
+* Programs or libraries not specifically requiring Web or WASI APIs would not need additional non-portable imports in general.
