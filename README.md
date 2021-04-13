@@ -8,6 +8,14 @@ However, some system features like obtaining the current time are essential to r
 
 This document explores a new set of essential `system.*` instructions.
 
+## Motivation
+
+Code reuse on and off the Web is desirable for the long-term success of the broader WebAssembly ecosystem, even though different environments may impose different requirements on system APIs. Some system APIs are common among the Web and Non-Web, however, so providing these in a portable way makes individual components reusable across ecosystems, e.g. without having to recompile and link statically or having to utilize a polyfill.
+
+<p align="center">
+  <img src="./code-reuse.svg" alt="Code reuse" />
+</p>
+
 ## Instructions
 
 * `system.time_local` obtains the current local time in milliseconds since Unix epoch.
