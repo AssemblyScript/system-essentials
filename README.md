@@ -2,19 +2,21 @@
 
 ## Introduction
 
-WebAssembly is sandboxed and does not have access to functionality other than what is supported by its instruction set or provided to it via imports. So typically, if there is functionality the host supports but WebAssembly doesn't, one would provide an appropriate import. On the Web, one would import a Web API, while off the Web, one would utilize an import namespace like WASI.
+WebAssembly is sandboxed by design and does not have access to functionality other than what is supported by its instruction set or provided to it via imports. So typically, if there is functionality the host supports but WebAssembly doesn't, one would provide an appropriate import. On the Web, one would import a Web API, while off the Web, one would utilize an import namespace like WASI.
 
-However, some system features like obtaining the current time are essential to run basic (portable) WebAssembly modules both on and off the Web, and being able to access these features in a uniform way would help to battle fragmentation that would otherwise require recompiling to use different import namespaces or, to work around having to recompile, polyfills, which is typically good to avoid on the Web where code size is especially important.
+However, some system features like obtaining the current time are essential to run basic (portable) WebAssembly modules both on and off the Web, and being able to access these features in a uniform way would help to battle fragmentation on an essential level that would otherwise require recompiling for different import namespaces or utilizing polyfills, which is generally good to avoid.
 
-This document explores a new set of essential `system.*` instructions, addressing concerns raised in discussions like [[1](https://github.com/WebAssembly/WASI/issues/401)] and [[2](https://github.com/WebAssembly/design/issues/1407)].
+Hence, this document explores a new set of essential `system.*` instructions, also addressing related concerns raised in discussions like [[1](https://github.com/WebAssembly/WASI/issues/401)] and [[2](https://github.com/WebAssembly/design/issues/1407)].
 
 ## Motivation
 
-Code reuse on and off the Web is desirable for the long-term success of the broader WebAssembly ecosystem, even though different environments may impose different requirements on system APIs. Some system APIs are common among the Web and Non-Web, however, so providing these in a portable way makes individual components reusable across ecosystems, e.g. without having to recompile and link statically or having to utilize a polyfill.
+Code reuse on and off the Web is desirable for the long-term success of the broader WebAssembly ecosystem, and even though different environments may impose different requirements on system APIs, some system APIs are essential and already common among the Web and Non-Web, so providing these in a portable way makes individual components reusable across ecosystems:
 
 <p align="center">
   <img src="./code-reuse.svg" alt="Code reuse" />
 </p>
+
+In the diagram above, the example image encoder and cryptographic library only depend on core WebAssembly with System Essentials, so can be reused across ecosystems, in turn improving not only library consumer ergonomics, but also providing essential building blocks compiler and standard library authors can rely on.
 
 ## Instructions
 
@@ -48,6 +50,11 @@ The list of instructions is not exhaustive and does not imply that instructions 
 
 ## Use cases
 
-* WASI applications could utilize system essentials, once available, reducing non-portable WASI API surface.
-* AssemblyScript could replace its custom essentials `env.time`, `env.seed` and eventually `env.trace` and `env.abort` (requires `system.log`) currently implemented as imports with system essentials, and would not have to choose between Web APIs (incompatible with WASI) and WASI (polyfill required).
-* Programs or libraries not specifically requiring Web or WASI APIs would not need additional non-portable imports in general.
+* Programs or libraries not specifically requiring Web or WASI APIs would not need additional non-portable imports in general, but are reusable by design.
+  * Time(ing)-aware utility
+  * Cryptographic utility
+  * Debugging by printing to console
+  * ...
+* Compilers and standard libraries could replace custom solutions with System Essentials / would not have to choose between Web and WASI APIs.
+* WASI applications could utilize System Essentials, reducing non-portable API surface, while also reducing polyfill overhead on the Web. For example, may only need to polyfill a file system.
+* Web applications could utilize System Essentials, reducing the need for separate glue code. For example, `system.timezoneoffset` cannot trivially be imported (requires `new`ing a `Date` object).
